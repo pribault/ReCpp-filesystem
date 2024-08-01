@@ -51,22 +51,6 @@ Single<std::filesystem::path> recpp::filesystem::rxWeaklyCanonical(const std::fi
 		});
 }
 
-Single<std::filesystem::path> recpp::filesystem::rxRelative(const std::filesystem::path &path)
-{
-	return Single<std::filesystem::path>::defer(
-		[path]()
-		{
-			try
-			{
-				return Single<std::filesystem::path>::just(std::filesystem::relative(path));
-			}
-			catch (const std::exception &exception)
-			{
-				return Single<std::filesystem::path>::error(std::make_exception_ptr(exception));
-			}
-		});
-}
-
 Single<std::filesystem::path> recpp::filesystem::rxRelative(const std::filesystem::path &path, const std::filesystem::path &base)
 {
 	return Single<std::filesystem::path>::defer(
@@ -75,22 +59,6 @@ Single<std::filesystem::path> recpp::filesystem::rxRelative(const std::filesyste
 			try
 			{
 				return Single<std::filesystem::path>::just(std::filesystem::relative(path, base));
-			}
-			catch (const std::exception &exception)
-			{
-				return Single<std::filesystem::path>::error(std::make_exception_ptr(exception));
-			}
-		});
-}
-
-Single<std::filesystem::path> recpp::filesystem::rxProximate(const std::filesystem::path &path)
-{
-	return Single<std::filesystem::path>::defer(
-		[path]()
-		{
-			try
-			{
-				return Single<std::filesystem::path>::just(std::filesystem::proximate(path));
 			}
 			catch (const std::exception &exception)
 			{
@@ -756,19 +724,9 @@ Single<std::filesystem::path> recpp::filesystem::FileSystem::rxWeaklyCanonical(c
 	return recpp::filesystem::rxWeaklyCanonical(path).subscribeOn(m_scheduler);
 }
 
-Single<std::filesystem::path> recpp::filesystem::FileSystem::rxRelative(const std::filesystem::path &path) const
-{
-	return recpp::filesystem::rxRelative(path).subscribeOn(m_scheduler);
-}
-
 Single<std::filesystem::path> recpp::filesystem::FileSystem::rxRelative(const std::filesystem::path &path, const std::filesystem::path &base) const
 {
 	return recpp::filesystem::rxRelative(path, base).subscribeOn(m_scheduler);
-}
-
-Single<std::filesystem::path> recpp::filesystem::FileSystem::rxProximate(const std::filesystem::path &path) const
-{
-	return recpp::filesystem::rxProximate(path).subscribeOn(m_scheduler);
 }
 
 Single<std::filesystem::path> recpp::filesystem::FileSystem::rxProximate(const std::filesystem::path &path, const std::filesystem::path &base) const
