@@ -1,13 +1,13 @@
-#include <recpp/filesystem/FileSystem.h>
-#include <recpp/async/ThreadPool.h>
 #include <recpp/async/EventLoop.h>
+#include <recpp/async/ThreadPool.h>
+#include <recpp/filesystem/FileSystem.h>
 
 #include <iostream>
 
 int main()
 {
-	recpp::async::ThreadPool threadPool;
-	recpp::async::EventLoop eventLoop;
+	recpp::async::ThreadPool	  threadPool;
+	recpp::async::EventLoop		  eventLoop;
 	recpp::filesystem::FileSystem fileSystem(threadPool);
 
 	fileSystem.rxAbsolute("examples")

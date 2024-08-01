@@ -15,7 +15,7 @@ include(FetchContent)
 FetchContent_Declare(
 	ReCpp
 	GIT_REPOSITORY	https://github.com/pribault/ReCpp.git
-	GIT_TAG			20fea13044d97ef19e5e7de7b50c745e113fab5c
+	GIT_TAG			fa725834059fe436a66e5e972db9247368cf0d0b
 )
 set(RSCPP_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 set(RSCPP_BUILD_TESTS  CACHE BOOL "" FORCE)
