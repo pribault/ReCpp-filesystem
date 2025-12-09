@@ -6,6 +6,9 @@
 
 namespace recpp::filesystem
 {
+	class AsyncFile;
+	using AsyncFilePtr = std::shared_ptr<AsyncFile>;
+
 	recpp::rx::Single<std::filesystem::path> rxAbsolute(const std::filesystem::path &path);
 	recpp::rx::Single<std::filesystem::path> rxCanonical(const std::filesystem::path &path);
 	recpp::rx::Single<std::filesystem::path> rxWeaklyCanonical(const std::filesystem::path &path);
@@ -51,6 +54,7 @@ namespace recpp::filesystem
 	recpp::rx::Single<bool>							   rxIsRegularFile(const std::filesystem::path &path);
 	recpp::rx::Single<bool>							   rxIsSocket(const std::filesystem::path &path);
 	recpp::rx::Single<bool>							   rxIsSymlink(const std::filesystem::path &path);
+	recpp::rx::Single<AsyncFilePtr> rxOpen(const std::filesystem::path &filename, std::ios_base::openmode mode = std::ios_base::in | std::ios_base::out);
 
 	/**
 	 * @brief FileSystem is a convenience class to work with a filesystem in a reactive way, and using a specific recpp::async::Scheduler to use for all
@@ -490,6 +494,15 @@ namespace recpp::filesystem
 		 * @return The resulting boolean as a recpp::rx::Single. True if the file indicated by p or if the type indicated s refers to a symbolic link
 		 */
 		recpp::rx::Single<bool> rxIsSymlink(const std::filesystem::path &path) const;
+
+		/**
+		 * @brief Asynchronously opens a file and associates it with the stream.
+		 *
+		 * @param path The name of the file to be opened
+		 * @param mode Specifies stream open mode
+		 * @return The resulting AsyncFile as a recpp::rx::Single
+		 */
+		recpp::rx::Single<AsyncFilePtr> rxOpen(const std::filesystem::path &filename, std::ios_base::openmode mode = std::ios_base::in | std::ios_base::out);
 
 	private:
 		recpp::async::Scheduler &m_scheduler;

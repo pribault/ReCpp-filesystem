@@ -1,7 +1,10 @@
 #include "recpp/filesystem/FileSystem.h"
 
+#include <recpp/filesystem/AsyncFile.h>
+
 using namespace recpp::async;
 using namespace recpp::rx;
+using namespace std;
 
 Single<std::filesystem::path> recpp::filesystem::rxAbsolute(const std::filesystem::path &path)
 {
@@ -508,6 +511,19 @@ Single<bool> recpp::filesystem::rxIsSymlink(const std::filesystem::path &path)
 		});
 }
 
+Single<recpp::filesystem::AsyncFilePtr> recpp::filesystem::rxOpen(const std::filesystem::path &filename, std::ios_base::openmode mode)
+{
+	return Single<recpp::filesystem::AsyncFilePtr>::defer(
+		[filename, mode]()
+		{
+			auto file = make_shared<recpp::filesystem::AsyncFile>();
+
+			return file
+				->rxOpen(filename, mode) //
+				.andThen(Single<recpp::filesystem::AsyncFilePtr>::just(file));
+		});
+}
+
 Single<std::filesystem::file_time_type> recpp::filesystem::rxLastWriteTime(const std::filesystem::path &path)
 {
 	return Single<std::filesystem::file_time_type>::defer(
@@ -925,4 +941,17 @@ Single<std::filesystem::file_status> recpp::filesystem::FileSystem::rxSymlinkSta
 Single<std::filesystem::path> recpp::filesystem::FileSystem::rxTempDirectoryPath() const
 {
 	return recpp::filesystem::rxTempDirectoryPath().subscribeOn(m_scheduler);
+}
+
+Single<recpp::filesystem::AsyncFilePtr> recpp::filesystem::FileSystem::rxOpen(const std::filesystem::path &filename, std::ios_base::openmode mode)
+{
+	return Single<recpp::filesystem::AsyncFilePtr>::defer(
+		[this, filename, mode]()
+		{
+			auto file = make_shared<recpp::filesystem::AsyncFile>(&m_scheduler);
+
+			return file
+				->rxOpen(filename, mode) //
+				.andThen(Single<recpp::filesystem::AsyncFilePtr>::just(file));
+		});
 }

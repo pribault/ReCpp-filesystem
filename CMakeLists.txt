@@ -15,7 +15,7 @@ include(FetchContent)
 FetchContent_Declare(
 	ReCpp
 	GIT_REPOSITORY	https://github.com/pribault/ReCpp.git
-	GIT_TAG			fa725834059fe436a66e5e972db9247368cf0d0b
+	GIT_TAG			adafec8aeaf97ae0b138cd26b578b55a1f32e150
 )
 set(RSCPP_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 set(RSCPP_BUILD_TESTS  CACHE BOOL "" FORCE)
@@ -24,7 +24,13 @@ set(RECPP_BUILD_TESTS OFF CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(ReCpp)
 
 set(SOURCES
+	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/filesystem/AsyncFile.h
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/filesystem/FileSystem.h
+	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/filesystem/ReadStream.h
+	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/filesystem/StreamBase.h
+	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/filesystem/WriteStream.h
+	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/filesystem/inl/StreamBase.inl
+	${CMAKE_CURRENT_SOURCE_DIR}/src/AsyncFile.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/src/FileSystem.cpp
 )
 
